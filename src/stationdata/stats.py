@@ -19,7 +19,7 @@ def daily_stats(readings, field="temperature_c"):
         if not valid:
             raise ValueError(f"no valid {field} readings for {day}")
         stats[day] = {
-            "mean": sum(valid) / len(values),
+            "mean": sum(valid) / len(valid),
             "min": min(valid),
             "max": max(valid),
         }
