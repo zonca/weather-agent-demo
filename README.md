@@ -6,7 +6,7 @@ station produces, convert units, compute daily statistics and flag sensor glitch
 ## Install
 
 ```bash
-git clone https://github.com/<your-user>/weather-agent-demo
+git clone https://github.com/zonca/weather-agent-demo
 cd weather-agent-demo
 pip install -e .
 ```
@@ -14,9 +14,9 @@ pip install -e .
 ## Quickstart
 
 ```python
-from stationdata import load_readings, daily_stats, flag_outliers
+from stationdata import load_csv, daily_stats, flag_outliers
 
-readings = load_readings("data/station_2026-09.csv")
+readings = load_csv("data/station_2026-09.csv")
 
 for day, s in daily_stats(readings).items():
     print(day, round(s["mean"], 1), s["min"], s["max"])
