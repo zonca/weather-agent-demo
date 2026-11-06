@@ -23,6 +23,8 @@ dependencies.
 - Do not commit unless asked. When asked, make small commits, one logical
   change per commit.
 - Use the `gh` CLI for GitHub operations (issues, PRs, releases, etc.).
+- Use `gog` for Google Drive operations (uploading, listing, downloading
+  files).
 
 ## Gotchas
 
