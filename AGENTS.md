@@ -11,10 +11,10 @@ dependencies.
 - The venv has no `pip` (created by `uv`). Reinstall after packaging changes
   with `uv pip install -e . --python .venv/bin/python`; do not try
   `.venv/bin/pip` or `python -m pip`.
-- There is no test suite, linter, formatter, or CI yet. `pytest` is installed;
-  run `.venv/bin/python -m pytest` before claiming a task is done. Since it
-  collects nothing today, also exercise the package directly against
-  `data/station_2026-09.csv`.
+- There is no linter, formatter, or CI yet. `pytest` is installed; run
+  `.venv/bin/python -m pytest` before claiming a task is done. Tests live in
+  `tests/` and use small hand-written inputs; also exercise the package
+  directly against `data/station_2026-09.csv`.
 - Python >= 3.10 (`pyproject.toml`); the venv runs 3.13.
 
 ## Rules
@@ -31,12 +31,10 @@ dependencies.
 - The README quickstart imports `load_readings`, which does not exist. The real
   public name is `load_csv` (see `src/stationdata/__init__.py`); it lives in
   `io.py`. Keep `__init__.py` `__all__` in sync with any rename.
-- `daily_stats` (`stats.py`) divides by `len(values)`, i.e. the count
-  *including* `None` readings, while `min`/`max` use only valid values. The
-  sample data contains missing readings, so reported means are skewed low.
-  Do not "simplify" this without deciding the intended missing-data semantics;
-  a day with all-missing values raises `ValueError` from `min()`.
-- Missing readings are `""` or `NA` in CSV and become `None` in memory; every
-  consumer must handle `None` (see `flag_outliers`).
+- Missing readings are `""` or `NA` in CSV and become `None` in memory.
+  `daily_stats` and `weekly_stats` ignore `None` values when computing
+  `mean`, `min` and `max`; every consumer must still handle `None` (see
+  `flag_outliers`). A day with no valid readings raises `ValueError`, and
+  `weekly_stats` propagates it for any week containing such a day.
 - Data file `data/station_2026-09.csv` is 720 hourly rows for 2026-09-01..30
   with columns `time` (ISO 8601), `temperature_c`, `humidity` (percent).
