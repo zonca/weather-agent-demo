@@ -4,10 +4,15 @@ from collections import defaultdict
 
 
 def _summarize(values):
-    """Mean, min and max of a list of values, ignoring missing ones."""
+    """Mean, min and max of a list of values, ignoring missing ones.
+
+    Returns ``None`` when every value is missing.
+    """
     valid = [v for v in values if v is not None]
+    if not valid:
+        return None
     return {
-        "mean": sum(valid) / len(values),
+        "mean": sum(valid) / len(valid),
         "min": min(valid),
         "max": max(valid),
     }
@@ -25,9 +30,10 @@ def daily_stats(readings, field="temperature_c"):
 
     stats = {}
     for day, values in sorted(values_by_day.items()):
-        if all(v is None for v in values):
+        summary = _summarize(values)
+        if summary is None:
             raise ValueError(f"no valid {field} readings for {day}")
-        stats[day] = _summarize(values)
+        stats[day] = summary
     return stats
 
 
